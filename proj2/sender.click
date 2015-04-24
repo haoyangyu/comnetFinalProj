@@ -1,0 +1,11 @@
+define($src_ip 192.168.1.1)
+define($dst_ip 192.168.1.2)
+define($src_mac b2:55:7c:91:41:e9)
+define($dst_mac 76:d3:fb:eb:e5:9b)
+define($dev veth1)
+
+RatedSource(DATA "hello", RATE 1)
+        ->IPEncap(4, $src_ip, $dst_ip)
+        ->EtherEncap(0x0800, $src_mac, $dst_mac)
+        ->Print(Sending)
+        ->ToDevice($dev)
