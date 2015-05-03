@@ -6,42 +6,44 @@
 #include <clicknet/udp.h>
 #include <clicknet/ether.h>
 #include <click/ipaddress.hh>
-
+//#include <stdint.h>
+#include <vector>
+//#include <std.h>
 CLICK_DECLS
 
 struct FTEntry
 {
-	uint_32t content_id;
+	uint32_t content_id;
 	in_addr my_interface;
-	uint_32t hopcount;
+	uint32_t hopcount;
 	
 };
 
 typedef std::vector<FTEntry> ForwardingTable;//The data structure to maintain the ForwardingTable
 
 
-class CnrRouting : public Element{
+class CrnRouting : public Element {
 	
 	public:
-		CnrRouting();
-		~CnrRouting();
+		CrnRouting();
+		~CrnRouting();
 		
 		const char *class_name() const {return "CrnRouting";}
-		const char *port_count() const {return "1/1";}
+		const char *port_count() const {return "3/3";}
 		const char *processing() const {return PUSH;}
 		
 		
 		int configure(Vector<String>&, ErrorHandler*);
 		
 		void push(int, Packet *);
-		void UpdateTable(uint_32t, in_addr, uint_32t);
-		void LookupTable(uint_32t);
+		void UpdateTable(uint32_t, in_addr, uint32_t);
+		FTEntry LookupTable(uint32_t);
 	
 	private:
 	
-	ForwardingTable forwardingtable;
+	ForwardingTable my_forwardingtable;
 	
-}
+};
 
 CLICK_ENDDECLS
 #endif
