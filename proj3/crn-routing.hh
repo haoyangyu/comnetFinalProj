@@ -7,7 +7,7 @@
 #include <clicknet/ether.h>
 #include <click/ipaddress.hh>
 //#include <stdint.h>
-#include <vector>
+#include <click/vector.hh>
 //#include <std.h>
 CLICK_DECLS
 
@@ -19,7 +19,7 @@ struct FTEntry
 	
 };
 
-typedef std::vector<FTEntry> ForwardingTable;//The data structure to maintain the ForwardingTable
+typedef Vector<FTEntry> ForwardingTable;//The data structure to maintain the ForwardingTable
 
 
 class CrnRouting : public Element {

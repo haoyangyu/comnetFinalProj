@@ -1,7 +1,6 @@
 #include <click/config.h>
 #include <click/confparse.hh>
 #include <click/error.hh>
-#include <vector>
 #include "simplechangeelement.hh"
 #include "crn-header.hh"
 #include "crn-routing.hh"
