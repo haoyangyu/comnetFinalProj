@@ -13,9 +13,9 @@ CLICK_DECLS
 
 struct FTEntry
 {
-	uint8_t content_id;
-	in_addr my_interface;
-	uint8_t hopcount;
+	uint32_t content_id;
+	in_addr out_interface;
+	uint32_t hopcount;
 	
 };
 
@@ -36,8 +36,8 @@ class CrnRouting : public Element {
 		int configure(Vector<String>&, ErrorHandler*);
 		
 		void push(int, Packet *);
-		void UpdateTable(uint8_t, in_addr, uint8_t);
-		FTEntry LookupTable(uint8_t);
+		void UpdateTable(uint32_t, in_addr, uint32_t);
+		FTEntry LookupTable(uint32_t);
 	
 	private:
 	

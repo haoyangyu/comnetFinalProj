@@ -22,23 +22,31 @@ void CrnRouting::push(int port, Packet *p){
 	
 	click_chatter("Switch gets packet size %d", p->length());
 	CrnPacket *cp = (CrnPacket *) (p->data());
-	if(port == 2 && cp->type == 2){//the packet is a update packet and coming from port 2
+	if(port == 1 && cp->type == 2){//the packet is a update packet and coming from port 1
 
-		UpdateTable(cp->content_id, cp->my_interface, cp->hopcount);
+		click_chatter("CrnRouting::push:the packet is a update packet and coming from port 1");
+		UpdateTable(cp->content_id, cp->out_interface, cp->hopcount);
+		cp->hopcount++;
+		WritablePacket *wp = p->uniqueify();
+		memcpy(wp->data(), cp, sizeof(*cp));
+		output(1).push(wp);
 		
 	}else if(port == 0 && cp->type == 0){//the packet is a request packet and coming from port 0
+		
+		click_chatter("CrnRouting::push:the packet is a request packet and coming from port 0");
 		FTEntry temp_FTEntry;
 		temp_FTEntry = LookupTable(cp->content_id);
-		cp->my_interface = temp_FTEntry.my_interface;
+		cp->out_interface = temp_FTEntry.out_interface;
+		WritablePacket *wp = p->uniqueify();
+		memcpy(wp->data(), cp, sizeof(*cp));
+		output(0).push(wp);
 		
 	}
 	
-	WritablePacket *wp = p->uniqueify();
-	memcpy(wp->data(), cp, sizeof(*cp));
-	output(1).push(wp);
+	
 	
 }
-void CrnRouting::UpdateTable(uint8_t content_id, in_addr my_interface, uint8_t hopcount){
+void CrnRouting::UpdateTable(uint32_t content_id, in_addr out_interface, uint32_t hopcount){
 	
 	
 	FTEntry ftentry;
@@ -55,7 +63,7 @@ void CrnRouting::UpdateTable(uint8_t content_id, in_addr my_interface, uint8_t h
 	if(found_flag==0){
 		click_chatter("CrnRouting::UpdateTable: Can not find duplicate entry, insert it!");
 		ftentry.content_id = content_id;
-		ftentry.my_interface = my_interface;
+		ftentry.out_interface = out_interface;
 		ftentry.hopcount = hopcount;
 		my_forwardingtable.push_back(ftentry);
 	}
@@ -75,7 +83,7 @@ FTEntry CrnRouting::LookupTable(uint32_t content_id){
 		if (content_id == my_forwardingtable[i].content_id){
 			click_chatter("CrnRouting::LookupTable: Entry found");
 			ftentry.content_id = my_forwardingtable[i].content_id;
-			ftentry.my_interface = my_forwardingtable[i].my_interface;
+			ftentry.out_interface = my_forwardingtable[i].out_interface;
 			ftentry.hopcount = my_forwardingtable[i].hopcount;
 		}
 						
