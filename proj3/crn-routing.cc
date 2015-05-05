@@ -1,6 +1,7 @@
 #include <click/config.h>
 #include <click/confparse.hh>
 #include <click/error.hh>
+#include "simplechangeelement.hh"
 #include "crn-header.hh"
 #include "crn-routing.hh"
 
@@ -19,7 +20,7 @@ int CrnRouting::configure(Vector<String> &conf, ErrorHandler *errh){
 
 void CrnRouting::push(int port, Packet *p){
 	
-	click_chatter("CrnRouting gets packet size %d", p->length());
+	click_chatter("Switch gets packet size %d", p->length());
 	CrnPacket *cp = (CrnPacket *) (p->data());
 	if(port == 2 && cp->type == 2){//the packet is a update packet and coming from port 2
 
@@ -34,10 +35,10 @@ void CrnRouting::push(int port, Packet *p){
 	
 	WritablePacket *wp = p->uniqueify();
 	memcpy(wp->data(), cp, sizeof(*cp));
-	output(1).push(wp);//output the packet to port 1. use ToDevice
+	output(1).push(wp);
 	
 }
-void CrnRouting::UpdateTable(uint8_t content_id, in_addr my_interface, uint8_t hopcount){
+void CrnRouting::UpdateTable(uint32_t content_id, in_addr my_interface, uint32_t hopcount){
 	
 	
 	FTEntry ftentry;
@@ -62,7 +63,7 @@ void CrnRouting::UpdateTable(uint8_t content_id, in_addr my_interface, uint8_t h
 	
 }
 
-FTEntry CrnRouting::LookupTable(uint8_t content_id){
+FTEntry CrnRouting::LookupTable(uint32_t content_id){
 	
 	FTEntry ftentry={
 		0,//content_id
