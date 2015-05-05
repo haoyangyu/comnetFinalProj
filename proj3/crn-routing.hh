@@ -36,8 +36,8 @@ class CrnRouting : public Element {
 		int configure(Vector<String>&, ErrorHandler*);
 		
 		void push(int, Packet *);
-		void UpdateTable(uint32_t, in_addr, uint32_t);
-		FTEntry LookupTable(uint32_t);
+		void UpdateTable(uint8_t, in_addr, uint8_t);
+		FTEntry LookupTable(uint8_t);
 	
 	private:
 	
