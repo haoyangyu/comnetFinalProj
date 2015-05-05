@@ -1,6 +1,8 @@
 #ifndef CLICK_CRN_HEADER_HH
 #define CLICK_CRN_HEADER_HH
 
+#include "click/ipaddress.hh"
+
 CLICK_DECLS
 
 struct CrnPacket{

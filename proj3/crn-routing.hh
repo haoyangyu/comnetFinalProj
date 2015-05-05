@@ -14,7 +14,7 @@ CLICK_DECLS
 struct FTEntry
 {
 	uint32_t content_id;
-	in_addr my_interface;
+	in_addr out_interface;
 	uint32_t hopcount;
 	
 };
