@@ -1,5 +1,5 @@
-#ifndef CLICK_CRN_ROUTING_HH
-#define CLICK_CRN_ROUTING_HH
+#ifndef CLICK_CRN_SRT_HH
+#define CLICK_CRN_SRT_HH
 
 
 #include <click/element.hh>
