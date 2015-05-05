@@ -38,7 +38,7 @@ void CrnRouting::push(int port, Packet *p){
 	output(1).push(wp);
 	
 }
-void CrnRouting::UpdateTable(uint32_t content_id, in_addr my_interface, uint32_t hopcount){
+void CrnRouting::UpdateTable(uint8_t content_id, in_addr my_interface, uint8_t hopcount){
 	
 	
 	FTEntry ftentry;

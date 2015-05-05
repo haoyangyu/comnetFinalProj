@@ -5,21 +5,24 @@
 
 CLICK_DECLS
 
-class classifier : public Element {
+class Classifier : public Element {
 	
 	public:
-		classifier();
-		~classifier();
+		Classifier();
+		~Classifier();
 	
 		const char *class_name() const {return "classifier";}
-		const char *port_count() const {return "1/2";}
+		const char *port_count() const {return "3/3";}
 		const char *processing() const {return PUSH;}
 		
 		int configure(Vector<String>&, ErrorHandler*);
 		
+		//Pass the packet into function to identify this packet
 		void push(int, Packet *);
 		
-		//	
-		void classifyPacket(Packet *);
+		//void classifyPacket(Packet *);
 
-}
+};
+
+CLICK_ENDDECLS
+#endif
