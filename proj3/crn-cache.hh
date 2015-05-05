@@ -1,5 +1,5 @@
-#ifndef CLICK_CLASSIFIER_HH
-#define CLICK_CLASSIFIER_HH
+#ifndef CLICK_CACHE_HH
+#define CLICK_CACHE_HH
 
 #include <click/element.hh>
 #include <click/vector.hh>
