@@ -5,9 +5,10 @@
 #include <click/vector.hh>
 CLICK_DECLS
 
+//Simplify the CCT as the table contains Content name and real contents
 struct CCTEntry{
         uint8_t content_id;
-		content_address;
+	const unsigned char * data;
 };
 
 //Define the data structure to maintain the Content Cache Table
@@ -20,17 +21,20 @@ class Cache : public Element {
                 ~Cache();
 
                 const char *class_name() const {return "cache";}
-		/*Input 0 -> request, 1 -> content
+		/*Input 0 -> request or content
 		  Output 0 -> request to SRT, 1 -> content back to front R/H*/
-                const char *port_count() const {return "2/2";}
+                const char *port_count() const {return "1/2";}
                 const char *processing() const {return PUSH;}
 
                 int configure(Vector<String>&, ErrorHandler*);
 
                 void push(int, Packet *);
 		//Self-defined functions
-		bool isFoundContent(uint8_t);
+		uint8_t isFoundContent(uint8_t);
 		struct CCTEntry lookUpCCT(uint8_t);
+	
+	private:
+		contentCacheTable my_contentCacheTable;
 };
 
 CLICK_ENDDECLS

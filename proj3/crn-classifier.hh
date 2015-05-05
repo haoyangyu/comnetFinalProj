@@ -12,7 +12,7 @@ class Classifier : public Element {
 		~Classifier();
 	
 		const char *class_name() const {return "classifier";}
-		const char *port_count() const {return "3/3";}
+		const char *port_count() const {return "1/3";}
 		const char *processing() const {return PUSH;}
 		
 		int configure(Vector<String>&, ErrorHandler*);
@@ -21,6 +21,7 @@ class Classifier : public Element {
 		void push(int, Packet *);
 		
 		//void classifyPacket(Packet *);
+	private:
 
 };
 
