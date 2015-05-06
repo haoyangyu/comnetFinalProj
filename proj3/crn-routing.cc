@@ -21,7 +21,7 @@ void CrnRouting::push(int port, Packet *p){
 	
 	click_chatter("Switch gets packet size %d", p->length());
 	CrnPacket *cp = (CrnPacket *) (p->data());
-	if(cp->type == 2){//the packet is a update packet and coming from port 1
+	if(cp->type == 2){//the packet is a update packet, udpate the table and forward to all interface
 
 		click_chatter("CrnRouting::push:the packet is a update packet and coming from port 1");
 		UpdateTable(cp->content_id, cp->out_interface, cp->hopcount);
@@ -30,7 +30,7 @@ void CrnRouting::push(int port, Packet *p){
 		memcpy(wp->data(), cp, sizeof(*cp));
 		output(1).push(wp);
 		
-	}else if(cp->type == 0){//the packet is a request packet and coming from port 0
+	}else if(cp->type == 0){//the packet is a request packet, lookup the next hop and forward to it
 		
 		click_chatter("CrnRouting::push:the packet is a request packet and coming from port 0");
 		FTEntry temp_FTEntry;
@@ -40,8 +40,9 @@ void CrnRouting::push(int port, Packet *p){
 		memcpy(wp->data(), cp, sizeof(*cp));
 		output(0).push(wp);
 		
-	}else{
-		
+	}else {
+		click_chatter("CrnRouting::push:the packet is killed");
+		p->kill();
 	}
 	
 	
