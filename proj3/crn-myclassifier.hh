@@ -1,5 +1,5 @@
-#ifndef CLICK_MYCLASSIFIER_HH
-#define CLICK_MYCLASSIFIER_HH
+#ifndef CLICK_SELFCLASSIFIER_HH
+#define CLICK_SELFCLASSIFIER_HH
 
 #include <click/element.hh>
 
@@ -11,7 +11,7 @@ class Myclassifier : public Element {
 		Myclassifier();
 		~Myclassifier();
 	
-		const char *class_name() const {return "classifier";}
+		const char *class_name() const {return "Myclassifier";}
 		const char *port_count() const {return "1/3";}
 		const char *processing() const {return PUSH;}
 		
