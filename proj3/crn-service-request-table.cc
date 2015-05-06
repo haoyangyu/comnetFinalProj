@@ -65,7 +65,7 @@ void CrnServiceRequestTable :: InsertEntry(in_addr in_interface, uint8_t content
 }
 
 void CrnServiceRequestTable :: RemoveEntry(uint8_t content_id){
-	
+		
 	 for(SRT::iterator i=my_srt.begin(); i!=my_srt.end(); i++){
 		 
 		 if(content_id ==  i->content_id){
@@ -76,7 +76,7 @@ void CrnServiceRequestTable :: RemoveEntry(uint8_t content_id){
 		 }
 		 
 	 }
-	
+	click_chatter("CrnServiceRequestTable::RemoveEntry: Entry removed");
 }
 
 
