@@ -6,9 +6,7 @@
 #include <clicknet/udp.h>
 #include <clicknet/ether.h>
 #include <click/ipaddress.hh>
-//#include <stdint.h>
 #include <click/vector.hh>
-//#include <std.h>
 CLICK_DECLS
 
 struct FTEntry
