@@ -22,14 +22,14 @@ void CrnServiceRequestTable :: push(int port, Packet *p){
 	
 	
 	CrnPacket *cp = (CrnPacket *) (p->data());
-	if (port == 0 && cp->type == 0){//this is a request packet, insert the entry and push to Routing
+	if (cp->type == 0){//this is a request packet, insert the entry and push to Routing
 		
 		InsertEntry(cp->in_interface, cp->content_id);
 		WritablePacket *wp = p->uniqueify();
 		memcpy(wp->data(), cp, sizeof(*cp));
 		output(0).push(wp);
 		
-	}else if (port == 1 && cp->type == 1){//this is a content packet, remove the entry and push to Cache
+	}else if (cp->type == 1){//this is a content packet, remove the entry and push to Cache
 		
 		RemoveEntry(cp->content_id);
 		WritablePacket *wp = p->uniqueify();
@@ -43,9 +43,9 @@ void CrnServiceRequestTable :: push(int port, Packet *p){
 void CrnServiceRequestTable :: InsertEntry(in_addr in_interface, uint8_t content_id){
 	
 	int found_flag = 0;
-	for (uint32_t i = 0; i<my_srt.size(); i++){
+	for(SRT::iterator i=my_srt.begin(); i!=my_srt.end(); i++){
 		
-		if(content_id == my_srt[i].content_id && in_interface == my_srt[i].in_interface){
+		if(content_id == i->content_id && in_interface == i->in_interface){
 		
 			found_flag = 1;
 			click_chatter("CrnServiceRequestTable::InsertEntry: Entry found, discard");
@@ -66,11 +66,11 @@ void CrnServiceRequestTable :: InsertEntry(in_addr in_interface, uint8_t content
 
 void CrnServiceRequestTable :: RemoveEntry(uint8_t content_id){
 	
-	 for(uint32_t i=0; i<my_srt.size(); i++){
+	 for(SRT::iterator i=my_srt.begin(); i!=my_srt.end(); i++){
 		 
-		 if(content_id ==  my_srt[i].content_id){
+		 if(content_id ==  i->content_id){
 			 
-			my_srt.erase(my_srt.begin()+i);
+			my_srt.erase(i);
 			break;
 			 
 		 }

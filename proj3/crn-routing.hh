@@ -27,7 +27,7 @@ class CrnRouting : public Element {
 		~CrnRouting();
 		
 		const char *class_name() const {return "CrnRouting";}
-		const char *port_count() const {return "3/3";}
+		const char *port_count() const {return "1/3";}
 		const char *processing() const {return PUSH;}
 		
 		

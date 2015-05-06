@@ -21,7 +21,7 @@ void CrnRouting::push(int port, Packet *p){
 	
 	click_chatter("Switch gets packet size %d", p->length());
 	CrnPacket *cp = (CrnPacket *) (p->data());
-	if(port == 1 && cp->type == 2){//the packet is a update packet and coming from port 1
+	if(cp->type == 2){//the packet is a update packet and coming from port 1
 
 		click_chatter("CrnRouting::push:the packet is a update packet and coming from port 1");
 		UpdateTable(cp->content_id, cp->out_interface, cp->hopcount);
@@ -30,7 +30,7 @@ void CrnRouting::push(int port, Packet *p){
 		memcpy(wp->data(), cp, sizeof(*cp));
 		output(1).push(wp);
 		
-	}else if(port == 0 && cp->type == 0){//the packet is a request packet and coming from port 0
+	}else if(cp->type == 0){//the packet is a request packet and coming from port 0
 		
 		click_chatter("CrnRouting::push:the packet is a request packet and coming from port 0");
 		FTEntry temp_FTEntry;
@@ -39,6 +39,8 @@ void CrnRouting::push(int port, Packet *p){
 		WritablePacket *wp = p->uniqueify();
 		memcpy(wp->data(), cp, sizeof(*cp));
 		output(0).push(wp);
+		
+	}else{
 		
 	}
 	
@@ -50,9 +52,9 @@ void CrnRouting::UpdateTable(uint32_t content_id, in_addr out_interface, uint32_
 	
 	FTEntry ftentry;
 	int found_flag = 0;
-	//for(ForwardingTable::iterator i=my_forwardingtable.begin(); i!=my_forwardingtable.end(); i++){
-	for(uint32_t i = 0; i < sizeof(my_forwardingtable); i++){
-		if (content_id == my_forwardingtable[i].content_id){
+	for(ForwardingTable::iterator i=my_forwardingtable.begin(); i!=my_forwardingtable.end(); i++){
+	//for(uint32_t i = 0; i < sizeof(my_forwardingtable); i++){
+		if (content_id == i->content_id){
 			click_chatter("CrnRouting::UpdateTable: Entry found, discard the update");
 			found_flag = 1;
 		}
@@ -78,12 +80,12 @@ FTEntry CrnRouting::LookupTable(uint32_t content_id){
 		0,//hopcount
 	};
 	int found_flag = 0;
-	for(uint32_t i = 0; i < sizeof(my_forwardingtable); i++){
-		if (content_id == my_forwardingtable[i].content_id){
+	for(ForwardingTable::iterator i=my_forwardingtable.begin(); i!=my_forwardingtable.end(); i++){
+		if (content_id == i->content_id){
 			click_chatter("CrnRouting::LookupTable: Entry found");
-			ftentry.content_id = my_forwardingtable[i].content_id;
-			ftentry.out_interface = my_forwardingtable[i].out_interface;
-			ftentry.hopcount = my_forwardingtable[i].hopcount;
+			ftentry.content_id = i->content_id;
+			ftentry.out_interface = i->out_interface;
+			ftentry.hopcount = i->hopcount;
 		}
 						
 	}

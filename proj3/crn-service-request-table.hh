@@ -21,7 +21,7 @@ class CrnServiceRequestTable : public Element {
 		~CrnServiceRequestTable();
 		
 		const char *class_name() const {return "CrnServiceRequestTable";}
-		const char *port_count() const {return "2/2";}
+		const char *port_count() const {return "1/2";}
 		const char *processing() const {return PUSH;}
 		
 		int configure(Vector<String>&, ErrorHandler*);
