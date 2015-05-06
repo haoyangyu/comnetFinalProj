@@ -29,7 +29,6 @@ void Myclassifier::push(int port, Packet *p){
 	}else if (cp -> type ==1){	
 	//If packet is a content packet, we define it come from port 1
 		//We need to save them in cache
-		output(0).push(p);
 		//Send the content out based on switch, define the output port 1 
 		output(1).push(p);
 	}else if (cp ->type ==2){

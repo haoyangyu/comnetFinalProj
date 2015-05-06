@@ -12,7 +12,7 @@ public:
 	CrnPacketGen();
 	~CrnPacketGen();
 	
-	const char *class_name() const { return "MyPacketGen";}
+	const char *class_name() const { return "CrnPacketGen";}
 	const char *port_count() const { return "0/1"; }
 	const char *processing() const { return PUSH; }
 	

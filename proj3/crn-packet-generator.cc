@@ -40,7 +40,7 @@ void CrnPacketGen::run_timer(Timer *timer) {
 
 void CrnPacketGen::sendRequest() {
 	click_chatter("Sending request");
-	WritablePacket *packet = Packet::make(0, 0, sizeof(CrnPacket), 0);
+	WritablePacket *packet = Packet::make(sizeof(CrnPacket));
 	CrnPacket *header = (CrnPacket *)packet->data();
 	header->type = 0;
 	header->content_id = 0;
@@ -50,16 +50,17 @@ void CrnPacketGen::sendRequest() {
 void CrnPacketGen::sendResponse() {
 	click_chatter("Sending response");
 	//Creating space for content of size 10
-	WritablePacket *packet = Packet::make(0, 0, sizeof(CrnPacket) + 10, 0);
+	WritablePacket *packet = Packet::make(sizeof(CrnPacket));
 	CrnPacket *header = (CrnPacket *)packet->data();
 	header->type = 1;
 	header->content_id = 0;
+	header->data=0;
 	output(0).push(packet);
 }
 
 void CrnPacketGen::sendUpdate() {
 	click_chatter("Sending update");
-	WritablePacket *packet = Packet::make(0, 0, sizeof(CrnPacket), 0);
+	WritablePacket *packet = Packet::make(sizeof(CrnPacket));
 	CrnPacket *header = (CrnPacket *)packet->data();
 	header->type = 2;
 	header->content_id = 0;
