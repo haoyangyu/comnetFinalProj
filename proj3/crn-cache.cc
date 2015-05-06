@@ -3,6 +3,7 @@
 #include <click/error.hh>
 #include "crn-header.hh"
 #include "crn-cache.hh"
+
 CLICK_DECLS
 
 Cache::Cache(){
@@ -26,7 +27,7 @@ void Cache::push(int port, Packet *p){
 		//Check the Content Cache Table
 		//If find the packet, send to SWITCH
 		uint8_t temp_content_id = cp->content_id;
-		if (isFoundContent(temp_content_id)>=0){
+		if (isFoundContent(temp_content_id)){
 			struct CCTEntry cctEntry=lookUpCCT(temp_content_id);
 			//Initial the response packet
 			int packetsize =sizeof(CrnPacket);
@@ -60,27 +61,28 @@ void Cache::push(int port, Packet *p){
 	}
 }
 
-uint8_t Cache::isFoundContent(uint8_t id){
-	uint8_t rows=sizeof(my_contentCacheTable);
-	for (uint8_t i=0; i<rows; ++i){
-		if (id == my_contentCacheTable[i].content_id)
-			return i;
+bool Cache::isFoundContent(uint8_t id){
+	for (contentCacheTable::iterator i=my_contentCacheTable.begin(); i!= my_contentCacheTable.end() ; i++){
+		if (id == i->content_id)
+			return true;
 	}
-	return -1;
+	return false;
 }
 
 struct CCTEntry Cache::lookUpCCT(uint8_t id){
-	uint8_t indexContent=isFoundContent(id);
 	struct CCTEntry cctEntry={
 				0,
 				0,
 				};
-	if (indexContent>=0){
-		cctEntry.content_id=my_contentCacheTable[indexContent].content_id;
-		cctEntry.data=my_contentCacheTable[indexContent].data;
-		return cctEntry;
-	}else{
-		click_chatter("EROOR: Cannot find Entry");
+	//We access the table only when we are sure that the data is in the Table
+	for (contentCacheTable::iterator i=my_contentCacheTable.begin(); i!=my_contentCacheTable.end(); i++){
+		if (id == i->content_id){
+			cctEntry.content_id = i->content_id;
+			cctEntry.data = i->data;
+			return cctEntry;
+		}else{
+			click_chatter ("Cannot find data");
+		}	
 	}
 }
 

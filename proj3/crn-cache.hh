@@ -3,6 +3,7 @@
 
 #include <click/element.hh>
 #include <click/vector.hh>
+#include <click/ipaddress.hh>
 CLICK_DECLS
 
 //Simplify the CCT as the table contains Content name and real contents
@@ -20,7 +21,7 @@ class Cache : public Element {
                 Cache();
                 ~Cache();
 
-                const char *class_name() const {return "cache";}
+                const char *class_name() const {return "Cache";}
 		/*Input 0 -> request or content
 		  Output 0 -> request to SRT, 1 -> content back to front R/H*/
                 const char *port_count() const {return "1/2";}
@@ -30,7 +31,7 @@ class Cache : public Element {
 
                 void push(int, Packet *);
 		//Self-defined functions
-		uint8_t isFoundContent(uint8_t);
+		bool isFoundContent(uint8_t);
 		struct CCTEntry lookUpCCT(uint8_t);
 	
 	private:

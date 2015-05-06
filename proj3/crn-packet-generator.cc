@@ -43,7 +43,7 @@ void CrnPacketGen::sendRequest() {
 	WritablePacket *packet = Packet::make(sizeof(CrnPacket));
 	CrnPacket *header = (CrnPacket *)packet->data();
 	header->type = 0;
-	header->in_interface="0.0.0.0";
+	//header->in_interface="0.0.0.0";
 	header->content_id = 0;
 	output(0).push(packet);
 }
@@ -54,7 +54,7 @@ void CrnPacketGen::sendResponse() {
 	WritablePacket *packet = Packet::make(sizeof(CrnPacket));
 	CrnPacket *header = (CrnPacket *)packet->data();
 	header->type = 1;
-	header->in_interface="0.0.0.0";
+	//header->in_interface="0.0.0.0";
 	header->content_id = 0;
 	header->data=0;
 	output(0).push(packet);
@@ -65,7 +65,7 @@ void CrnPacketGen::sendUpdate() {
 	WritablePacket *packet = Packet::make(sizeof(CrnPacket));
 	CrnPacket *header = (CrnPacket *)packet->data();
 	header->type = 2;
-	header->in_interface="0.0.0.0";
+	//header->in_interface="0.0.0.0";
 	header->content_id = 0;
 	output(0).push(packet);
 }
