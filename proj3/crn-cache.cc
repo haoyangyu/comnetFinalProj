@@ -16,7 +16,7 @@ int Cache::configure(Vector<String> &conf, ErrorHandler *errh){
 }
 
 void Cache::push(int port, Packet *p){
-	click_chatter("Classifier got a packet of size %d",p->length());
+	click_chatter("Cache got a packet of size %d",p->length());
         CrnPacket *cp =(CrnPacket *)p->data();
 	if (port!=0){
 		click_chatter("ERROR: Got a packet on wrong port");
@@ -43,8 +43,7 @@ void Cache::push(int port, Packet *p){
 			WritablePacket *wp = p->uniqueify();
 	                memcpy(wp->data(), new_cp, sizeof(*new_cp));
         	        output(1).push(wp);
-			//Remember to kill the request packet
-			wp->kill();		
+				
 		}else{
 		//If not find sent to SRT
 			output(0).push(p);
