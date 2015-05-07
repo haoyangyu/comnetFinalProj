@@ -24,17 +24,21 @@ void Myclassifier::push(int port, Packet *p){
 	
 	//If packet is a request packet, we define it come from port 0
 	if (cp->type ==0){
+		click_chatter("Classifier: got the request packet");
 		//Through output 0 to CACHE element 
 		output(0).push(p);		
 	}else if (cp -> type ==1){	
 	//If packet is a content packet, we define it come from port 1
 		//We need to save them in cache
-		//Send the content out based on switch, define the output port 1 
+		//Send the content out based on switch, define the output port 1
+		click_chatter("Classifier: got the response packet"); 
 		output(1).push(p);
 	}else if (cp ->type ==2){
 		//We need to send out the update packet through output port 2
+		click_chatter("Classifier: got the update packet");
 		output(2).push(p);
 	}else{
+		click_chatter("Classifier: kill the packet");
 		p->kill();
 	}
 }

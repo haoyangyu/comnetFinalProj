@@ -28,12 +28,13 @@ void Cache::push(int port, Packet *p){
 		//If find the packet, send to SWITCH
 		uint8_t temp_content_id = cp->content_id;
 		if (isFoundContent(temp_content_id)){
+			click_chatter("Cache: Find the content in cache");
 			struct CCTEntry cctEntry=lookUpCCT(temp_content_id);
 			//Initial the response packet
 			int packetsize =sizeof(CrnPacket);
 			WritablePacket *packet =Packet::make(packetsize);
 			if (packet == 0 )
-				return click_chatter ("cannot make packet!!");
+				return click_chatter ("cannot make the data packet!!");
 			memset(packet ->data(),0, packet->length());
 			CrnPacket *new_cp = (CrnPacket *) packet->data();
 			new_cp->type=1;	
@@ -44,13 +45,17 @@ void Cache::push(int port, Packet *p){
 	                memcpy(wp->data(), new_cp, sizeof(*new_cp));
         	        output(1).push(wp);
 				
+			click_chatter("Cache: Push cached data to requester");
+
 		}else{
 		//If not find sent to SRT
+			click_chatter("Cache: Cannot find the content in cache");
 			output(0).push(p);
 		}
 	}else if (cp->type ==1){
 	//For content packet
 	//save the packet into vector 
+		click_chatter("Cache: Save the content in CCT");
 		struct CCTEntry cctEntry;
 		cctEntry.content_id=cp->content_id;
 		cctEntry.data=cp->data;
