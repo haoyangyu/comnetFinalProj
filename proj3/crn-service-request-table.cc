@@ -20,7 +20,7 @@ int CrnServiceRequestTable :: configure(Vector<String> &conf, ErrorHandler *errh
 }
 void CrnServiceRequestTable :: push(int port, Packet *p){
 	
-	
+	click_chatter("SRT gets packet size %d", p->length());
 	CrnPacket *cp = (CrnPacket *) (p->data());
 	if (cp->type == 0){//this is a request packet, insert the entry and push to Routing
 		
@@ -42,6 +42,7 @@ void CrnServiceRequestTable :: push(int port, Packet *p){
 
 void CrnServiceRequestTable :: InsertEntry(in_addr in_interface, uint8_t content_id){
 	
+	
 	int found_flag = 0;
 	for(SRT::iterator i=my_srt.begin(); i!=my_srt.end(); i++){
 		
@@ -59,13 +60,13 @@ void CrnServiceRequestTable :: InsertEntry(in_addr in_interface, uint8_t content
 		temp_srtentry.in_interface = in_interface;
 		temp_srtentry.content_id = content_id;
 		my_srt.push_back(temp_srtentry);
-		
+		click_chatter("CrnServiceRequestTable :: InsertEntry: Insert an entry");
 	}
 	
 }
 
 void CrnServiceRequestTable :: RemoveEntry(uint8_t content_id){
-		
+	click_chatter("CrnServiceRequestTable :: RemoveEntry: entry removed");
 	 for(SRT::iterator i=my_srt.begin(); i!=my_srt.end(); i++){
 		 
 		 if(content_id ==  i->content_id){
