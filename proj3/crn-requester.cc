@@ -2,6 +2,9 @@
 #include <click/confparse.hh>
 #include <click/error.hh>
 #include <click/timer.hh>
+#include <clicknet/ip.h>
+#include <clicknet/udp.h>
+#include <clicknet/ether.h>
 #include "crn-requester.hh"
 #include "crn-header.hh"
 
@@ -38,7 +41,9 @@ void CrnRequester::run_timer(Timer *timer){
 }
 void CrnRequester::sendRequest() {
 	click_chatter("Sending request");
-	WritablePacket *packet = Packet::make(sizeof(CrnPacket));
+	//int headroom = sizeof(click_ip)+sizeof(click_udp)+sizeof(click_ether);
+	int headroom = 0;
+	WritablePacket *packet = Packet::make(headroom,0,sizeof(CrnPacket),0);
 	CrnPacket *header = (CrnPacket *)packet->data();
 	header->type = 0;
 	//header->in_interface="0.0.0.0";
@@ -47,8 +52,22 @@ void CrnRequester::sendRequest() {
 }
 
 void CrnRequester::push(int port, Packet *p) {
-	click_chatter("ERROR: this should not happen");
+	
+	CrnPacket *cp = (CrnPacket *) (p->data());
+	if(cp->type==1){
+		click_chatter("CrnRequester::This is a response packet!");
+	}else if(cp->type==2){
+		click_chatter("CrnRequester::This is a update packet");
+		
+	}else{
+		
+		p->kill();
+	}
 	return;
+}
+Packet* CrnRequester::pull(int){
+	
+	return 0;
 }
 
 CLICK_ENDDECLS

@@ -14,10 +14,11 @@ public:
 
 	const char *class_name() const { return "CrnRequester";}
 	const char *port_count() const { return "1/1"; }
-	const char *processing() const { return PUSH; }
+	const char *processing() const { return AGNOSTIC; }
 	
 	int configure(Vector<String>&, ErrorHandler*);
 	void push(int, Packet *);
+	Packet*  pull(int);
 	int initialize(ErrorHandler *errh);
 	void run_timer(Timer *timer);
 	void sendRequest();
