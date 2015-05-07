@@ -2,34 +2,30 @@
 #include <click/confparse.hh>
 #include <click/error.hh>
 #include <click/timer.hh>
-#include "crn-packet-generator.hh"
+#include "crn-provider.hh"
 #include "crn-header.hh"
 
 CLICK_DECLS
 
-CrnPacketGen::CrnPacketGen() : _timer(this), current_loop(0) {}
-CrnPacketGen::~CrnPacketGen(){}
+CrnProvider::CrnProvider(): _timer(this), current_loop(0){}
+CrnProvider::~CrnProvider(){}
 
-int CrnPacketGen::configure(Vector<String> &conf, ErrorHandler *errh) {
+int CrnProvider::configure(Vector<String> &conf, ErrorHandler *errh) {
 	return 0;
 }
 
-int CrnPacketGen::initialize(ErrorHandler *) {
+int CrnProvider::initialize(ErrorHandler *) {
 	_timer.initialize(this);   // Initialize timer object (mandatory).
 	_timer.schedule_after_sec(2);
 	return 0;
 }
 
-void CrnPacketGen::run_timer(Timer *timer) {
+void CrnProvider::run_timer(Timer *timer) {
 	// This function is called when the timer fires.
 	Timestamp now = Timestamp::now();
-	click_chatter("%s: %{timestamp}: timer fired!\n",
+	click_chatter("CrnProvider: %s: %{timestamp}: timer fired!\n",
                declaration().c_str(), &now);
-	if(current_loop == 0) {
-		this->sendRequest();
-	} else if (current_loop == 1) {
-		this->sendResponse();
-	} else {
+	if (current_loop ==2) {
 		this->sendUpdate();
 	}
 	current_loop++;
@@ -38,18 +34,8 @@ void CrnPacketGen::run_timer(Timer *timer) {
 	}
 }
 
-void CrnPacketGen::sendRequest() {
-	click_chatter("Sending request");
-	WritablePacket *packet = Packet::make(sizeof(CrnPacket));
-	CrnPacket *header = (CrnPacket *)packet->data();
-	header->type = 0;
-	//header->in_interface="0.0.0.0";
-	header->content_id = 0;
-	output(0).push(packet);
-}
-
-void CrnPacketGen::sendResponse() {
-	click_chatter("Sending response");
+void CrnProvider::sendResponse() {
+	click_chatter("CrnProvider: Sending response back");
 	//Creating space for content of size 10
 	WritablePacket *packet = Packet::make(sizeof(CrnPacket));
 	CrnPacket *header = (CrnPacket *)packet->data();
@@ -60,20 +46,22 @@ void CrnPacketGen::sendResponse() {
 	output(0).push(packet);
 }
 
-void CrnPacketGen::sendUpdate() {
-	click_chatter("Sending update");
+void CrnProvider::sendUpdate() {
+	click_chatter("CrnProvider: Sending update");
 	WritablePacket *packet = Packet::make(sizeof(CrnPacket));
 	CrnPacket *header = (CrnPacket *)packet->data();
 	header->type = 2;
 	//header->in_interface="0.0.0.0";
 	header->content_id = 0;
-	output(0).push(packet);
+	output(1).push(packet);
 }
 
-void CrnPacketGen::push(int port, Packet *p) {
-	click_chatter("ERROR: this should not happen");
+void CrnProvider::push(int port, Packet *p) {
+	click_chatter("CrnProvider: Process request packet");
+	//We assume the privider has the content with content_id
+	sendResponse();
 	return;
 }
 
 CLICK_ENDDECLS
-EXPORT_ELEMENT(CrnPacketGen)
+EXPORT_ELEMENT(CrnProvider)

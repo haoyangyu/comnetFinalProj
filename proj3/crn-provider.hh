@@ -1,26 +1,26 @@
-#ifndef CLICK_CRNPACKETGEN_HH
-#define CLICK_CRNPACKETGEN_HH
+#ifndef CLICK_CRNPROVIDER_HH
+#define CLICK_CRNPROVIDER_HH
 
 #include <click/element.hh>
 #include <click/timer.hh>
-
 CLICK_DECLS
 
-class CrnPacketGen : public Element {
+class CrnProvider : public Element {
 
 public:
-	CrnPacketGen();
-	~CrnPacketGen();
-	
-	const char *class_name() const { return "CrnPacketGen";}
-	const char *port_count() const { return "0/1"; }
+	CrnProvider();
+	~CrnProvider();
+
+	const char *class_name() const { return "CrnProvider";}
+	// 1 input only accept request packet
+	// 2 output, 0 for response packet; 1 for update packet
+	const char *port_count() const { return "1/2"; }
 	const char *processing() const { return PUSH; }
 	
 	int configure(Vector<String>&, ErrorHandler*);
 	void push(int, Packet *);
 	int initialize(ErrorHandler *errh);
 	void run_timer(Timer *timer);
-	void sendRequest();
 	void sendResponse();
 	void sendUpdate();
 	
